@@ -458,7 +458,7 @@ public class FileUtils extends CordovaPlugin {
                     if(containsCreate && needPermission(nativeURL, path, WRITE)) {
                         getWritePermission(rawArgs, ACTION_GET_DIRECTORY, callbackContext);
                     }
-                    else if(!containsCreate && needPermission(nativeURL, READ)) {
+                    else if(!containsCreate && needPermission(nativeURL, path, READ)) {
                         getReadPermission(rawArgs, ACTION_GET_DIRECTORY, callbackContext);
                     }
                     else {
@@ -593,10 +593,10 @@ public class FileUtils extends CordovaPlugin {
         return PermissionHelper.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-    private boolean needPermission(String nativeURL, String path, int permissionType) throws JSONException {
+    private boolean needPermission(String nativeURL, int permissionType) throws JSONException {
         return needPermission(nativeURL, null, permissionType);
     }
-    
+
     private boolean needPermission(String nativeURL, String path, int permissionType) throws JSONException {
         JSONObject j = requestAllPaths();
         ArrayList<String> allowedStorageDirectories = new ArrayList<String>();
