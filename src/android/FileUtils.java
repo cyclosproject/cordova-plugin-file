@@ -455,7 +455,7 @@ public class FileUtils extends CordovaPlugin {
                     String nativeURL = resolveLocalFileSystemURI(dirname).getString("nativeURL");
                     boolean containsCreate = (args.isNull(2)) ? false : args.getJSONObject(2).optBoolean("create", false);
 
-                    if(containsCreate && needPermission(nativeURL, WRITE)) {
+                    if(containsCreate && needPermission(nativeURL, path, WRITE)) {
                         getWritePermission(rawArgs, ACTION_GET_DIRECTORY, callbackContext);
                     }
                     else if(!containsCreate && needPermission(nativeURL, READ)) {
@@ -593,13 +593,20 @@ public class FileUtils extends CordovaPlugin {
         return PermissionHelper.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-    private boolean needPermission(String nativeURL, int permissionType) throws JSONException {
+    private boolean needPermission(String nativeURL, String path, int permissionType) throws JSONException {
+        return needPermission(nativeURL, null, permissionType);
+    }
+    
+    private boolean needPermission(String nativeURL, String path, int permissionType) throws JSONException {
         JSONObject j = requestAllPaths();
         ArrayList<String> allowedStorageDirectories = new ArrayList<String>();
         allowedStorageDirectories.add(j.getString("applicationDirectory"));
         allowedStorageDirectories.add(j.getString("applicationStorageDirectory"));
         if(j.has("externalApplicationStorageDirectory")) {
             allowedStorageDirectories.add(j.getString("externalApplicationStorageDirectory"));
+        }
+        if(j.has("externalRootDirectory")) {
+            allowedStorageDirectories.add(j.getString("externalRootDirectory") + "Download");
         }
 
         if(permissionType == READ && hasReadPermission()) {
@@ -611,7 +618,7 @@ public class FileUtils extends CordovaPlugin {
 
         // Permission required if the native url lies outside the allowed storage directories
         for(String directory : allowedStorageDirectories) {
-            if(nativeURL.startsWith(directory)) {
+            if((nativeURL + (path == null ? "" : path)).startsWith(directory)) {
                 return false;
             }
         }
