@@ -21,6 +21,11 @@ description: Read/write files on the device.
 #         under the License.
 -->
 
+# Cyclos patch
+We patched this plugin to add support for Android 13 (API level 33). The latest release at the moment of the patch was 8.0.0 but it requires Cordova 12. We reverted the requirement to try with Cordvoa 11 but it doesn't work with Android 5.1 Lollipop (API level 22). Then, we created a new branch from 7.0.0: __7.0.0_cyclos__ and patched the file FileUtils.java to support download files to the _Download_ folder (this is a well-known location with r/w permissions by default).
+
+This plugin is used for iOS and Android but the patch was only for Android (for iOS we continue using the published version).
+
 # cordova-plugin-file
 
 [![Android Testsuite](https://github.com/apache/cordova-plugin-file/actions/workflows/android.yml/badge.svg)](https://github.com/apache/cordova-plugin-file/actions/workflows/android.yml) [![Chrome Testsuite](https://github.com/apache/cordova-plugin-file/actions/workflows/chrome.yml/badge.svg)](https://github.com/apache/cordova-plugin-file/actions/workflows/chrome.yml) [![iOS Testsuite](https://github.com/apache/cordova-plugin-file/actions/workflows/ios.yml/badge.svg)](https://github.com/apache/cordova-plugin-file/actions/workflows/ios.yml) [![Lint Test](https://github.com/apache/cordova-plugin-file/actions/workflows/lint.yml/badge.svg)](https://github.com/apache/cordova-plugin-file/actions/workflows/lint.yml)
